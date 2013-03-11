@@ -5,10 +5,12 @@ package gomounts
 /*
 #include <string.h>
 #include <stdlib.h>
+// Dev stub
 int GetLogicalDrives(void)
 {
-	return 13; // A, C, D, Z
+	return 13; // A, C, D
 }
+// Dev stub
 int GetVolumeInformation(
 char* lpRootPathName,
 char* lpVolumeNameBuffer,

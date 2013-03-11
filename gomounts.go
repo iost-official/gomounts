@@ -1,3 +1,9 @@
+// Package gomounts implements a cross-platform library for retrieving
+// mounted filesystem volumes.
+//
+// Author: Clint Caywood
+//
+// https://github.com/cratonica/gomounts
 package gomounts
 
 // Represents a mounted volume on the host system
