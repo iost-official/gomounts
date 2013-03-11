@@ -5,26 +5,7 @@ package gomounts
 /*
 #include <string.h>
 #include <stdlib.h>
-// Dev stub
-int GetLogicalDrives(void)
-{
-	return 13; // A, C, D
-}
-// Dev stub
-int GetVolumeInformation(
-char* lpRootPathName,
-char* lpVolumeNameBuffer,
-int nVolumeNameSize,
-int* lpVolumeSerialNumber,
-int* lpMaximumComponentLength,
-int* lpFileSystemFlags,
-char* lpFileSystemNameBuffer,
-int nFileSystemNameSize
-)
-{
-	strncpy(lpFileSystemNameBuffer, "NTFS", nFileSystemNameSize);
-	return 1; // Success
-}
+#include <Windows.h>
 */
 import "C"
 
@@ -46,7 +27,7 @@ func getMountedVolumes() ([]Volume, error) {
 			fsType := func() string {
 				cRootPath := C.CString(rootPath)
 				defer C.free(unsafe.Pointer(cRootPath))
-				if C.GetVolumeInformation(cRootPath, nil, 0, nil, nil, nil, &buf[0], C.int(len(buf))) != 0 {
+				if C.GetVolumeInformation(C.LPCSTR(unsafe.Pointer(cRootPath)), nil, 0, nil, nil, nil, C.LPCSTR(unsafe.Pointer(&buf[0])), C.DWORD(len(buf))) != 0 {
 					return C.GoString(&buf[0])
 				}
 				return "Unknown"
