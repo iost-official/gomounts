@@ -1,5 +1,3 @@
-// +build linux darwin
-
 package gomounts
 
 /*
@@ -13,7 +11,6 @@ import (
 	"unsafe"
 )
 
-// Unix implementation
 func getMountedVolumes() ([]Volume, error) {
 	result := make([]Volume, 0)
 
