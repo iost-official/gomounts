@@ -1,3 +1,5 @@
+// +build darwin
+
 package gomounts
 
 /*
@@ -8,12 +10,14 @@ package gomounts
 import "C"
 import (
 	"errors"
-	"unsafe"
-	"sync"
 	"reflect"
+	"strconv"
+	"sync"
+	"unsafe"
 )
 
 var mtx sync.Mutex = sync.Mutex{}
+
 func getMountedVolumes() ([]Volume, error) {
 	// getmntinfo is non-reentrant
 	mtx.Lock()
@@ -35,9 +39,9 @@ func getMountedVolumes() ([]Volume, error) {
 	sliceHeader.Data = uintptr(unsafe.Pointer(mntbuf))
 
 	for _, v := range mntSlice {
-		result = append(result, Volume{C.GoString(&v.f_mntonname[0]), C.GoString(&v.f_fstypename[0])})
+		uidstr := strconv.Itoa(v.f_owner)
+		result = append(result, Volume{C.GoString(&v.f_mntonname[0]), C.GoString(&v.f_fstypename[0]), uidstr})
 	}
 
 	return result, nil
 }
-

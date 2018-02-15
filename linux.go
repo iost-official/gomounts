@@ -8,6 +8,7 @@ package gomounts
 import "C"
 import (
 	"errors"
+	"strings"
 	"unsafe"
 )
 
@@ -25,9 +26,17 @@ func getMountedVolumes() ([]Volume, error) {
 	defer C.endmntent(file)
 	var ent *C.struct_mntent
 
+	mntopt := C.CString("user_id")
 	for ent = C.getmntent(file); ent != nil; ent = C.getmntent(file) {
 		mntType := C.GoString(ent.mnt_type)
-		result = append(result, Volume{C.GoString(ent.mnt_dir), mntType})
+		uidstr := ""
+		if substr := C.GoString(C.hasmntopt(ent, mntopt)); len(substr) > 0 {
+			commasplit := strings.SplitN(substr, ",", 2)
+			equalsplit := strings.SplitN(commasplit[0], "=", 2)
+			uidstr = equalsplit[len(equalsplit)-1]
+		}
+		result = append(result, Volume{
+			C.GoString(ent.mnt_dir), mntType, uidstr})
 	}
 
 	return result, nil

@@ -1,7 +1,7 @@
 package gomounts_test
 
 import (
-	"github.com/cratonica/gomounts"
+	"github.com/strib/gomounts"
 	"log"
 )
 

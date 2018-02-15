@@ -4,12 +4,15 @@
 // Author: Clint Caywood
 //
 // https://github.com/cratonica/gomounts
+//
+// +build linux
 package gomounts
 
 // Represents a mounted volume on the host system
 type Volume struct {
-	Path string // The mount point of the volume
-	Type string // The filesystem type
+	Path  string // The mount point of the volume
+	Type  string // The filesystem type
+	Owner string
 }
 
 // Gets a slice of all volumes that are currently

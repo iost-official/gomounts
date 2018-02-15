@@ -10,7 +10,7 @@ func TestGetMountedVolumes(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, volume := range volumes {
-		t.Log(volume.Path, volume.Type)
+		t.Log(volume.Path, volume.Type, volume.Owner)
 	}
 	if len(volumes) == 0 {
 		t.Fatal("No volumes found")
