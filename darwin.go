@@ -11,6 +11,7 @@ import "C"
 import (
 	"errors"
 	"reflect"
+	"fmt"
 	"strconv"
 	"sync"
 	"unsafe"
@@ -26,9 +27,13 @@ func getMountedVolumes() ([]Volume, error) {
 	result := make([]Volume, 0)
 
 	var mntbuf *C.struct_statfs
-	count := int(C.getmntinfo(&mntbuf, C.MNT_NOWAIT))
-	if count == -1 {
-		return result, errors.New("Failure calling getmntinfo")
+	cnt, err := C.getmntinfo(&mntbuf, C.MNT_NOWAIT)
+	if err != nil {
+		return result, fmt.Errorf("Failure getmntinfo: %+v", err)
+	}
+	count := int(cnt)
+	if count == 0 {
+		return nil, nil
 	}
 
 	// Convert to go slice per https://code.google.com/p/go-wiki/wiki/cgo
